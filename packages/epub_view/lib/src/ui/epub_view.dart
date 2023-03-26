@@ -104,8 +104,7 @@ class _EpubViewState extends State<EpubView> {
       return true;
     }
     _chapters = parseChapters(_controller._document!);
-    final parseParagraphsResult =
-        parseParagraphs(_chapters, _controller._document!.Content);
+    final parseParagraphsResult = parseParagraphs(_chapters, _controller._document!.Content);
     _paragraphs = parseParagraphsResult.flatParagraphs;
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);
 
@@ -121,8 +120,7 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
-    if (_paragraphs.isEmpty ||
-        _itemPositionListener!.itemPositions.value.isEmpty) {
+    if (_paragraphs.isEmpty || _itemPositionListener!.itemPositions.value.isEmpty) {
       return;
     }
     final position = _itemPositionListener!.itemPositions.value.first;
@@ -215,12 +213,10 @@ class _EpubViewState extends State<EpubView> {
       return;
     } else {
       final paragraph = _paragraphByIdRef(hrefIdRef);
-      final chapter =
-          paragraph != null ? _chapters[paragraph.chapterIndex] : null;
+      final chapter = paragraph != null ? _chapters[paragraph.chapterIndex] : null;
 
       if (chapter != null && paragraph != null) {
-        final paragraphIndex =
-            _epubCfiReader?.getParagraphIndexByElement(paragraph.element);
+        final paragraphIndex = _epubCfiReader?.getParagraphIndexByElement(paragraph.element);
         final cfi = _epubCfiReader?.generateCfi(
           book: _controller._document,
           chapter: chapter,
@@ -234,18 +230,15 @@ class _EpubViewState extends State<EpubView> {
     }
   }
 
-  Paragraph? _paragraphByIdRef(String idRef) =>
-      _paragraphs.firstWhereOrNull((paragraph) {
+  Paragraph? _paragraphByIdRef(String idRef) => _paragraphs.firstWhereOrNull((paragraph) {
         if (paragraph.element.id == idRef) {
           return true;
         }
 
-        return paragraph.element.children.isNotEmpty &&
-            paragraph.element.children[0].id == idRef;
+        return paragraph.element.children.isNotEmpty && paragraph.element.children[0].id == idRef;
       });
 
-  EpubChapter? _chapterByFileName(String? fileName) =>
-      _chapters.firstWhereOrNull((chapter) {
+  EpubChapter? _chapterByFileName(String? fileName) => _chapters.firstWhereOrNull((chapter) {
         if (fileName != null) {
           if (chapter.ContentFileName!.contains(fileName)) {
             return true;
@@ -351,15 +344,15 @@ class _EpubViewState extends State<EpubView> {
 
     for (int i = 0; i < paragraphs.length && allParagraphsHtml.length < paragraphs.length; i++) {
       if (allParagraphsHtml.length < paragraphs.length) {
-        print('index $i');
+        // print('index $i');
         // print(allParagraphsHtml.length);
         // print(paragraphs.length);
         // print(paragraphs[i].element.outerHtml);
         // print(paragraphs[i].element.innerHtml);
 
         // chapterDisplayNameToScrollIndexMap.addAll({'index $i: ${paragraphs[i].element.outerHtml}': i});
-        final classPlusId = '${paragraphs[i].element.className} + ${paragraphs[i].element.id}';
-        if (paragraphs[i].element.id.isNotEmpty) print(classPlusId);
+        // final classPlusId = '${paragraphs[i].element.className} + ${paragraphs[i].element.id}';
+        // if (paragraphs[i].element.id.isNotEmpty) print(classPlusId);
 
         // allParagraphsHtml.add(paragraphs[i].element.outerHtml + 'class:${paragraphs[i].element.}');
         allParagraphsHtml.add(paragraphs[i].element.id);
@@ -379,10 +372,8 @@ class _EpubViewState extends State<EpubView> {
             ).merge(Style.fromTextStyle(options.textStyle)),
           },
           customRenders: {
-            tagMatcher('img'):
-                CustomRender.widget(widget: (context, buildChildren) {
-              final url = context.tree.element!.attributes['src']!
-                  .replaceAll('../', '');
+            tagMatcher('img'): CustomRender.widget(widget: (context, buildChildren) {
+              final url = context.tree.element!.attributes['src']!.replaceAll('../', '');
               return Image(
                 image: MemoryImage(
                   Uint8List.fromList(
