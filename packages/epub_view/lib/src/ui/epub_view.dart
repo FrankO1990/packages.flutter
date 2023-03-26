@@ -367,7 +367,7 @@ class _EpubViewState extends State<EpubView> {
 
     return Column(
       children: <Widget>[
-        Text('index $index: ${paragraphs[index].element.outerHtml}'),
+        // Text('index $index: ${paragraphs[index].element.outerHtml}'),
         if (chapterIndex >= 0 && paragraphIndex == 0) builders.chapterDividerBuilder(chapters[chapterIndex]),
         Html(
           data: paragraphs[index].element.outerHtml,
