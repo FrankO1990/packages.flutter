@@ -19,6 +19,8 @@ part '../helpers/epub_view_builders.dart';
 const _minTrailingEdge = 0.55;
 const _minLeadingEdge = -0.05;
 
+List<String> allParagraphsHtml = List<String>.empty(growable: true);
+
 typedef ExternalLinkPressed = void Function(String href);
 
 class EpubView extends StatefulWidget {
@@ -164,7 +166,8 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
-  void _onLinkPressed(String href) {
+  void _onLinkPressed(String href) async {
+    print('on link pressed: $href');
     if (href.contains('://')) {
       widget.onExternalLinkPressed?.call(href);
       return;
@@ -181,6 +184,17 @@ class _EpubViewState extends State<EpubView> {
       } else {
         hrefFileName = dividedHref[0];
         hrefIdRef = dividedHref[1];
+        print('try go to id $hrefIdRef');
+        for (int i = 0; i < allParagraphsHtml.length; i++) {
+          if (allParagraphsHtml[i] == hrefIdRef) {
+            print('found id at index: $i');
+            await _itemScrollController?.scrollTo(
+              index: i,
+              duration: Duration(milliseconds: 300),
+            );
+            return;
+          }
+        }
       }
     } else {
       hrefFileName = href;
@@ -334,10 +348,27 @@ class _EpubViewState extends State<EpubView> {
     final defaultBuilder = builders as EpubViewBuilders<DefaultBuilderOptions>;
     final options = defaultBuilder.options;
 
+    for (int i = 0; i < paragraphs.length && allParagraphsHtml.length < paragraphs.length; i++) {
+      if (allParagraphsHtml.length < paragraphs.length) {
+        print('index $i');
+        // print(allParagraphsHtml.length);
+        // print(paragraphs.length);
+        // print(paragraphs[i].element.outerHtml);
+        // print(paragraphs[i].element.innerHtml);
+
+        // chapterDisplayNameToScrollIndexMap.addAll({'index $i: ${paragraphs[i].element.outerHtml}': i});
+        final classPlusId = '${paragraphs[i].element.className} + ${paragraphs[i].element.id}';
+        if (paragraphs[i].element.id.isNotEmpty) print(classPlusId);
+
+        // allParagraphsHtml.add(paragraphs[i].element.outerHtml + 'class:${paragraphs[i].element.}');
+        allParagraphsHtml.add(paragraphs[i].element.id);
+      }
+    }
+
     return Column(
       children: <Widget>[
-        if (chapterIndex >= 0 && paragraphIndex == 0)
-          builders.chapterDividerBuilder(chapters[chapterIndex]),
+        Text('index $index: ${paragraphs[index].element.outerHtml}'),
+        if (chapterIndex >= 0 && paragraphIndex == 0) builders.chapterDividerBuilder(chapters[chapterIndex]),
         Html(
           data: paragraphs[index].element.outerHtml,
           onLinkTap: (href, _, __, ___) => onExternalLinkPressed(href!),
