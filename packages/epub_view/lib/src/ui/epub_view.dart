@@ -69,6 +69,7 @@ class _EpubViewState extends State<EpubView> {
 
   @override
   void initState() {
+    allParagraphsHtml.clear();
     super.initState();
     _itemScrollController = ItemScrollController();
     _itemPositionListener = ItemPositionsListener.create();
